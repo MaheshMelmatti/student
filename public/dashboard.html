@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Student Dashboard</title>
+    <link rel="stylesheet" href="/style.css">
+
+    <style>
+        body {
+            background: linear-gradient(135deg, #4e73df, #1cc88a);
+            font-family: Arial, sans-serif;
+            color: white;
+            text-align: center;
+            padding-top: 60px;
+        }
+
+        .container {
+            width: 380px;
+            margin: auto;
+            background: white;
+            padding: 30px;
+            border-radius: 15px;
+            color: #333;
+            box-shadow: 0px 0px 20px rgba(0,0,0,0.3);
+            animation: fadeIn 0.7s ease-in-out;
+        }
+
+        button {
+            width: 100%;
+            padding: 12px;
+            background: #4e73df;
+            border: none;
+            color: white;
+            font-size: 16px;
+            border-radius: 10px;
+            cursor: pointer;
+            margin-top: 15px;
+            transition: 0.3s;
+        }
+
+        button:hover {
+            background: #2e59d9;
+            transform: scale(1.05);
+        }
+
+        /* Popup Style */
+        #coursePopup {
+            position: fixed;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            background: rgba(0,0,0,0.6);
+            display: none;
+            justify-content: center;
+            align-items: center;
+        }
+
+        #popupBox {
+            width: 420px;
+            background: white;
+            color: black;
+            padding: 20px;
+            border-radius: 15px;
+            text-align: left;
+            max-height: 70vh;
+            overflow-y: auto;
+        }
+
+        .closeBtn {
+            background: red;
+            margin-top: 20px;
+        }
+
+        .courseItem {
+            background: #e7e9fc;
+            padding: 10px;
+            margin-top: 10px;
+            border-radius: 8px;
+            border-left: 5px solid #4e73df;
+        }
+    </style>
+
+</head>
+<body>
+
+    <div class="container">
+        <h2>Welcome Student</h2>
+
+        <button onclick="window.location.href='/courses.html'">
+            Register for Courses
+        </button>
+
+        <button onclick="loadCourses()">
+            View My Courses
+        </button>
+
+        <button onclick="logout()">
+            Logout
+        </button>
+    </div>
+
+    <!-- Popup for showing courses -->
+    <div id="coursePopup">
+        <div id="popupBox">
+            <h2>Your Courses</h2>
+            <div id="courseList"></div>
+            <button class="closeBtn" onclick="closePopup()">Close</button>
+        </div>
+    </div>
+
+    <script>
+        // ⭐ Fetch Courses From Server
+        async function loadCourses() {
+            const res = await fetch("/my-courses");
+            const data = await res.json();
+
+            if (data.length === 0) {
+                alert("You have not registered for any course yet.");
+                return;
+            }
+
+            let list = document.getElementById("courseList");
+            list.innerHTML = ""; // clear old data
+
+            data.forEach(course => {
+                list.innerHTML += `
+                    <div class="courseItem">
+                        <b>Course:</b> ${course.courseName}<br>
+                        <b>Course ID:</b> ${course.courseID}<br>
+                        <b>Student Name:</b> ${course.studentName}<br>
+                        <b>Student ID:</b> ${course.studentID}
+                    </div>
+                `;
+            });
+
+            document.getElementById("coursePopup").style.display = "flex";
+        }
+
+        function closePopup() {
+            document.getElementById("coursePopup").style.display = "none";
+        }
+
+        function logout() {
+            window.location.href = "/index.html";
+        }
+    </script>
+
+</body>
+</html>

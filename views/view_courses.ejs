@@ -1,0 +1,51 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>Courses</title>
+  <link rel="stylesheet" href="/css/styles.css">
+</head>
+<body>
+<div class="container">
+  <header>
+    <h1>Available Courses</h1>
+    <% if (currentUser) { %>
+      <div>
+        Welcome, <strong><%= currentUser.name %></strong> |
+        <a href="/logout">Logout</a>
+      </div>
+    <% } %>
+  </header>
+
+  <table>
+    <thead>
+    <tr>
+      <th>Code</th>
+      <th>Title</th>
+      <th>Description</th>
+      <th>Seats</th>
+      <th>Action</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    <% courses.forEach(course => { %>
+      <tr>
+        <td><%= course.code %></td>
+        <td><%= course.title %></td>
+        <td><%= course.description || '-' %></td>
+        <td><%= course.seats %></td>
+        <td>
+          <% if (registeredIds.includes(String(course._id))) { %>
+          Registered
+          <% } else { %>
+          <a href="/courses/register/<%= course._id %>">Register</a>
+          <% } %>
+        </td>
+      </tr>
+    <% }); %>
+    </tbody>
+  </table>
+</div>
+</body>
+</html>

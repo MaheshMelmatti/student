@@ -1,0 +1,25 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>Register Course</title>
+  <link rel="stylesheet" href="/css/styles.css">
+</head>
+<body>
+<div class="container">
+  <h1>Register for <%= course.title %> (<%= course.code %>)</h1>
+
+  <% if (error) { %>
+    <p class="error"><%= error %></p>
+  <% } %>
+
+  <p><strong>Description:</strong> <%= course.description %></p>
+  <p><strong>Seats left:</strong> <%= course.seats %></p>
+
+  <form method="POST" action="/courses/register/<%= course._id %>">
+    <button type="submit">Confirm Register</button>
+    <a href="/courses">Cancel</a>
+  </form>
+</div>
+</body>
+</html>
