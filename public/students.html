@@ -1,0 +1,48 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Registered Students</title>
+  <link rel="stylesheet" href="/styles.css" />
+</head>
+<body>
+  <div class="container">
+    <h1>Registered Students</h1>
+    <div id="list"></div>
+    <p><a href="/">Back to register</a></p>
+  </div>
+
+  <script>
+    async function loadStudents() {
+      try {
+        const res = await fetch('/api/students');
+        const students = await res.json();
+        const list = document.getElementById('list');
+        if (!students.length) {
+          list.innerHTML = '<p>No students registered yet.</p>';
+          return;
+        }
+        const html = students.map(s => `
+          <div class="card">
+            <strong>${escapeHtml(s.name)}</strong>
+            <div>${escapeHtml(s.email)}</div>
+            <div>Course: ${escapeHtml(s.course || '-')}</div>
+            <div>Roll: ${escapeHtml(s.roll || '-')}</div>
+          </div>
+        `).join('');
+        list.innerHTML = html;
+      } catch (err) {
+        document.getElementById('list').innerText = 'Failed to load';
+      }
+    }
+
+    function escapeHtml(s) {
+      if (!s) return '';
+      return s.replaceAll('&', '&amp;').replaceAll('<', '&lt;').replaceAll('>', '&gt;');
+    }
+
+    window.onload = loadStudents;
+  </script>
+</body>
+</html>
